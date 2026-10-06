@@ -6,6 +6,8 @@ const errorMessage = document.querySelector("#error-message");
 const noteCount = document.querySelector("#note-count");
 const searchInput = document.querySelector("#search-input");
 const searchForm = document.querySelector("#search-form");
+const clearAllBtn = document.querySelector("#clear-all");
+
 
 const STORAGE_KEY = "quicknotes";
 
@@ -86,6 +88,7 @@ function render() {
       notesList.append(createNoteCard(note));
     });
   }
+clearAllBtn.hidden = notes.length === 0;
 }
 
 //  Add a note 
@@ -132,5 +135,13 @@ searchForm.addEventListener("submit", function (event) {
   event.preventDefault();
   render();
 });
+
+clearAllBtn.addEventListener("click", function(){
+  if(confirm("Delete all notes?")){
+    notes = [];
+    saveNotes();
+    render();
+  }
+})
 
 render();

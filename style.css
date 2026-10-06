@@ -78,6 +78,10 @@ input:focus-visible, select:focus-visible, button:focus-visible {
 .delete-btn:hover { background: #962d22; }
 .empty-message { color: #52606d; font-style: italic; }
 
+#clear-all{margin-top: 10px;
+background: #52606d;
+}
+
 footer { text-align: center; color: #52606d; padding: 16px; }
 
 /* Small screens: stack the form */
