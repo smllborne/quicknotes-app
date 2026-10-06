@@ -33,7 +33,10 @@
 
     <section id="notes-section">
       <h2>Your notes</h2>
-      <input type="text" id="search-input" placeholder="Search notes" aria-label="Search notes">
+      <form id="search-form" role="search">
+        <input type="search" id="search-input" placeholder="Search notes" aria-label="Search notes">
+        <button type="submit">Search</button>
+      </form>
       <p id="note-count"></p>
       <ul id="notes-list"></ul>
     </section>

@@ -1,12 +1,32 @@
-
 const form = document.querySelector("#note-form");
 const noteInput = document.querySelector("#note-input");
 const categorySelect = document.querySelector("#note-category");
 const notesList = document.querySelector("#notes-list");
 const errorMessage = document.querySelector("#error-message");
 const noteCount = document.querySelector("#note-count");
+const searchInput = document.querySelector("#search-input");
+const searchForm = document.querySelector("#search-form");
 
-let notes = [];
+const STORAGE_KEY = "quicknotes";
+
+//Load saved notes 
+function loadNotes(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return Array.isArray(saved) ? saved : [];
+  }catch (e){
+    return [];
+  }
+}
+
+function saveNotes(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+  }catch (e){
+
+  }
+}
+let notes = loadNotes();
 
 //Count text
 function countText(){
@@ -47,12 +67,25 @@ function createNoteCard(note) {
 
 //  Draw all notes on the page 
 function render() {
+  const query = searchInput.value.trim().toLowerCase();
+  const visible = notes.filter(function (note) {
+    return note.text.toLowerCase().includes(query) ||
+      note.category.toLowerCase().includes(query);
+  });
+
   notesList.replaceChildren();
   noteCount.textContent = countText();
 
-  notes.forEach(function (note) {
-    notesList.append(createNoteCard(note));
-  });
+  if (notes.length > 0 && visible.length === 0) {
+    const li = document.createElement("li");
+    li.className = "empty-message";
+    li.textContent = "No notes match your search.";
+    notesList.append(li);
+  } else {
+    visible.forEach(function (note) {
+      notesList.append(createNoteCard(note));
+    });
+  }
 }
 
 //  Add a note 
@@ -90,7 +123,13 @@ notesList.addEventListener("click", function(event){
   notes = notes.filter(function(note) {
     return note.id !== id;
   });
+  saveNotes();
+  render();
+});
 
+searchInput.addEventListener("input", render);
+searchForm.addEventListener("submit", function (event) {
+  event.preventDefault();
   render();
 });
 
